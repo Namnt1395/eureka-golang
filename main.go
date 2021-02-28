@@ -1,12 +1,8 @@
 package main
 
 import (
-	"encoding/xml"
 	"eureka-golang/eureka"
-	"eureka-golang/object"
 	"eureka-golang/service"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -24,30 +20,7 @@ func main() {
 	//wg := sync.WaitGroup{} // Use a WaitGroup to block main() exit
 	//wg.Add(1)
 	//wg.Wait()
-	resp, err := http.Get("http://157.230.53.38:8761/eureka/apps/api-demo")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	//We Read the response body on the line below.
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
 
-	// Convert the body to type string
-	//sb :=  string(body)
-
-	var instance object.ApplicationsXml
-	err1 := xml.Unmarshal(body, &instance.Application)
-	if err1 != nil {
-		fmt.Println(err1.Error())
-	}
-	fmt.Println("Data...", instance.Application.Name)
-
-	listInstance := instance.Application
-	for _, v := range listInstance.Instance {
-		fmt.Println("Data...", v.HostName)
-	}
 	//fmt.Println(sb)
 
 	//	log.Printf(sb)
