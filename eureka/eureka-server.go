@@ -1,9 +1,13 @@
 package eureka
 
 import (
+	"encoding/xml"
+	"eureka-golang/object"
 	"eureka-golang/util"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -113,8 +117,31 @@ func StartHeartbeat() {
 	}
 }
 
-func GetInstanceService(serviceName string)  {
-	
+func GetInstanceService(serviceName string) string {
+	urlService := fmt.Sprintf("%s%s", ServerEureka, serviceName)
+	resp, err := http.Get(urlService)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	//We Read the response body on the line below.
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	var application object.ApplicationsXml
+	err1 := xml.Unmarshal(body, &application.Application)
+	if err1 != nil {
+		fmt.Println(err1.Error())
+	}
+	// Load balancer
+	listInstance := application.Application.Instance
+	var rws util.RandomWeightedSelector
+	for index, instance := range listInstance {
+		if instance.Status == "UP" {
+			rws.AddEndpoint(util.Endpoint{Weight: index, URL: instance.RealLink})
+		}
+	}
+	return rws.Select().URL
 }
 
 func heartbeat() {
