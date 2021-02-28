@@ -14,4 +14,5 @@ type InstanceItem struct {
 	IpAddr string `xml:"ipAddr"`
 	Status string `xml:"status"`
 	Port string `xml:"port"`
+	RealLink string `xml:"realLink"`
 }
