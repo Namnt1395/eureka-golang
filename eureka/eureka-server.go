@@ -16,7 +16,7 @@ import (
 
 const (
 	ApplicationName = "api-demo"
-	ServerEureka    = "http://157.230.53.38:8761/eureka/apps/"
+	ServerEureka    = "http://IP_PUBLIC:8761/eureka/apps/"
 	Prefix          = "http://"
 )
 
