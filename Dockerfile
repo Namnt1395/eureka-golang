@@ -5,19 +5,15 @@ ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 #Tiến hành setup
 #Copy các file project vào container
-COPY eureka /go/src/demo-eureka/eureka
-COPY handle /go/src/demo-eureka/handle
-COPY model  /go/src/demo-eureka/model
-COPY service /go/src/demo-eureka/service
-COPY templates /go/src/demo-eureka/templates
-COPY util /go/src/demo-eureka/util
-COPY main.go /go/src/demo-eureka/main.go
+COPY eureka /go/src/eureka-golang/eureka
+COPY handle /go/src/eureka-golang/handle
+COPY object /go/src/eureka-golang/object
+COPY main.go /go/src/eureka-golang/main.go
 
 #Thu muc lam viec
-WORKDIR $GOPATH/src/demo-eureka/
+WORKDIR $GOPATH/src/eureka-golang/
 
 RUN go get github.com/gorilla/mux
-RUN go get github.com/satori/go.uuid
 
 RUN go build main.go
 # Command to run the executable
