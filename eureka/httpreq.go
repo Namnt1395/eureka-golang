@@ -2,10 +2,11 @@ package eureka
 
 import (
 	"crypto/tls"
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
+	"time"
+
 	// "strconv"
 )
 
@@ -15,13 +16,11 @@ func DoHttpRequest(httpAction HttpAction) bool {
 	var DefaultTransport http.RoundTripper = &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
 	}
-	resp, err := DefaultTransport.RoundTrip(req)
-	fmt.Println("res.....", resp)
+	_, err := DefaultTransport.RoundTrip(req)
 	if err != nil {
 		log.Printf("HTTP request failed: %s", err)
 		return false
 	}
-	defer resp.Body.Close()
 	return true
 }
 
@@ -49,8 +48,16 @@ func buildHttpRequest(httpAction HttpAction) *http.Request {
 	return req
 }
 
-func HttpGet(url string)  {
-
+func IsLive(urlService string) bool {
+	client := &http.Client{
+		Timeout: time.Second * 5,
+	}
+	_, err := client.Get(urlService)
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
+	return true
 }
 
 /**
